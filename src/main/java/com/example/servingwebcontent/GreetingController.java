@@ -258,30 +258,6 @@ public class GreetingController {
         return "page";
     }
 
-    @GetMapping("/givemeatable")
-    public String atable(Model model) {
-        Employee[] theEmployees = {new Employee(1, "José", "9199999", 1890), new Employee(2, "Marisa", "9488444", 2120), new Employee(3, "Hélio", "93434444", 2500)};
-        List<Employee> le = new ArrayList<>();
-        Collections.addAll(le, theEmployees);
-        model.addAttribute("emp", le);
-        return "table";
-    }
-
-    @GetMapping("/create-project")
-    public String createProjectForm(Model model) {
-
-        model.addAttribute("project", new Project());
-        return "create-project";
-    }
-
-    @PostMapping("/save-project")
-    public String saveProjectSubmission(@ModelAttribute Project project) {
-
-        // TODO: save project in DB here
-
-        return "result";
-    }
-
     @GetMapping("/counters")
     public String counters(Model model) {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
