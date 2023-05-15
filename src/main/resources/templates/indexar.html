@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Indexar</title>
+
+</head>
+<body>
+<h1>Indexar URL</h1>
+
+<div th:if="${#httpServletRequest.getMethod() == 'GET'}">
+    <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
+        <div>
+
+            <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
+            <button class="btn btn-search" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
+
+        </div>
+
+    </form>
+</div>
+<div th:if="${#httpServletRequest.getMethod() == 'POST'}">
+    <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
+        <div>
+
+            <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
+
+            <button class="btn btn-search" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
+            <div th:if="${valor.equals('true')}">
+                <p>URL adicionado com sucesso!</p>
+            </div>
+        </div>
+    </form>
+</div>
+<a th:href="@{/}">Voltar</a>
+
+</body>
+</html>

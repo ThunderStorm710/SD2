@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Googol</title>
+
+</head>
+<body>
+<div class="container">
+    <div class="imgcontainer">
+        <img src="../static/f87747816.png" class="rounded" alt="Googol"/>
+    </div>
+    <form th:action="@{/pesquisar}" th:object="${pesquisa}" method="post">
+        <div>
+
+        <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
+
+        <button class="btn btn-search" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
+        </div>
+
+    </form>
+</div>
+<a th:href="@{/}">Voltar</a>
+
+</body>
+</html>
