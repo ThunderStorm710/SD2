@@ -124,6 +124,17 @@ public class GreetingController {
         System.out.println(pesquisa);
         System.out.println(cliente);
         HashSet<String[]> paginas;
+
+        MyHackerNewsController hacker = new MyHackerNewsController();
+
+        List<HackerNewsItemRecord> TopStories = hacker.hackerNewsTopStories(pesquisa.getTextoPesquisa());
+
+        for(HackerNewsItemRecord story: TopStories){
+            ArrayList<String> array = new ArrayList<>();
+            String url = story.url();
+
+        }
+
         try {
             paginas = h.pesquisarPaginas(cliente, pesquisa.getTextoPesquisa());
             if (paginas != null) {
