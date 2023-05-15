@@ -208,13 +208,6 @@ public class GreetingController {
         return "info";
     }
 
-    @GetMapping("/greeting")
-    public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
-        model.addAttribute("name", name);
-        model.addAttribute("othername", "SD");
-        return "greeting";
-    }
-
     @GetMapping("/home")
     public String pesquisa(Model model) {
         if (cliente == null) {
@@ -257,23 +250,4 @@ public class GreetingController {
 
         return "page";
     }
-
-    @GetMapping("/counters")
-    public String counters(Model model) {
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
-        Integer counter = (Integer) session.getAttribute("counter");
-        int c;
-        if (counter == null)
-            c = 1;
-        else
-            c = counter + 1;
-        session.setAttribute("counter", c);
-        model.addAttribute("sessioncounter", c);
-        model.addAttribute("requestcounter2", this.nRequest.next());
-        model.addAttribute("sessioncounter2", this.nSession.next());
-        model.addAttribute("applicationcounter2", this.nApplication.next());
-        return "counter";
-    }
-
 }
