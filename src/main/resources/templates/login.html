@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Login</title>
 </head>
 <body>
+<h1>Googol</h1>
+<h2>Seja bem-vindo ao seu motor de busca favorito!!</h2>
 <div th:if="${#httpServletRequest.getMethod() == 'GET'}">
     <form th:action="@{/login}" th:object="${clienteInfo}" method="post">
         <div class="container">
@@ -27,7 +30,7 @@
             <input type="email" class="form-control" placeholder="" th:field="*{email}">
             <label><b>Password</b></label>
             <input type="password" class="form-control" placeholder="" th:field="*{password}">
-            <button type="submit">Login</button>
+            <button type="submit">Registo</button>
         </div>
     </form>
 </div>
