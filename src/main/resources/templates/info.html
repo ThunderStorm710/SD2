@@ -25,14 +25,24 @@
     </div>
 </nav>
 <body>
-<h1>Informação geral</h1>
+<div class="d-flex justify-content-center align-items-center">
+    <h1 class="text-center">Informação geral</h1>
+</div>
+<div class="d-flex justify-content-center align-items-center">
+    <h3 class="text-center">Aqui poderá obter toda a informação sobre a nossa plataforma!</h3>
+</div>
 <div>
     <div>
-        <div th:if="${!d}">
-            <table th:if="${downloaders}">
-                <thead>
+        <div class="d-flex justify-content-center align-items-center">
+            <h5 class="text-center">Downloaders</h5>
+        </div>
+        <div class="d-flex justify-content-center align-items-center" th:if="${!d}">
+            <table class="table" th:if="${downloaders}">
+                <thead class="thead-dark">
                 <tr>
-                    <th>Downloaders</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">Porto</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,17 +50,24 @@
                     <td th:text="${downloader.id}"></td>
                     <td th:text="${downloader.ip}"></td>
                     <td th:text="${downloader.porto}"></td>
-
                 </tr>
                 </tbody>
             </table>
         </div>
+        <div class="d-flex justify-content-center align-items-center" th:if="${d}">
+            <h5>Não existem quaisquer downloaders online de momento...</h5>
+        </div>
 
-        <div th:if="${!b}">
-            <table th:if="${barrels}">
-                <thead>
+        <div class="d-flex justify-content-center align-items-center" th:if="${!b}">
+            <h5 class="text-center">Storage Barrels</h5>
+        </div>
+        <div class="d-flex justify-content-center align-items-center" th:if="${!b}">
+            <table class="table" th:if="${barrels}">
+                <thead class="thead-dark">
                 <tr>
-                    <th>Barrels</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">Porto</th>
+                    <th scope="col">Gama</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -62,12 +79,20 @@
                 </tbody>
             </table>
         </div>
+        <div th:if="${b}">
+            <h5 class="text-center">Não existem quaisquer storage barrels online de momento...</h5>
+        </div>
 
-        <div th:if="${!m}">
-            <table th:if="${mapa}">
-                <thead>
+        <div class="d-flex justify-content-center align-items-center">
+            <h5>Pesquisas frequentes</h5>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center" th:if="${!m}">
+            <table class="table" th:if="${mapa}">
+                <thead class="thead-dark">
                 <tr>
-                    <th>Pesquisas frequentes</th>
+                    <th scope="col">Pesquisa</th>
+                    <th scope="col">Frequência</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -77,6 +102,9 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div th:if="${m}">
+            <h5>Não existem quaisquer pesquisas de momento...</h5>
         </div>
     </div>
 </div>

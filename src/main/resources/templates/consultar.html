@@ -25,7 +25,15 @@
     </div>
 </nav>
 <body>
-<h1>Consulta</h1>
+<div class="d-flex justify-content-center align-items-center">
+    <h1 class="text-center">Consulta</h1>
+</div>
+<div class="d-flex justify-content-center align-items-center">
+    <h3 class="text-center">Aqui poderá pesquisar os links que mais desejar!</h3>
+</div>
+<div class="d-flex justify-content-center align-items-center">
+    <h5 class="text-center">Procuraremos por si em que páginas o link inserido se encontra!!</h5>
+</div>
 <div th:if="${#httpServletRequest.getMethod() == 'GET'}">
     <form th:action="@{/consultar}" th:object="${pesquisa}" method="post">
         <div>
@@ -46,14 +54,23 @@
             <div th:if="${mensagem}">
                 <p th:text="${mensagem}"></p>
             </div>
-            <table th:if="${urls}">
-                <thead>
+
+        </div>
+
+        <div>
+            <div class="d-flex justify-content-center align-items-center" th:if="${urls}">
+                <h5 class="text-center">Resultados da pesquisa</h5>
+            </div>
+            <table class="table" th:if="${urls}">
+                <thead class="thead-dark">
                 <tr>
-                    <th th:text="${textoPesquisa}">Resultados da pesquisa</th>
+                    <th>#</th>
+                    <th>URL</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="resultado : ${urls}">
+                <tr th:each="resultado, i : ${urls}">
+                    <td th:text="${i.count}"></td>
                     <td th:text="${resultado}"></td>
                 </tr>
                 </tbody>

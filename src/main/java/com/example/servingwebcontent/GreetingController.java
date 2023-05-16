@@ -184,7 +184,12 @@ public class GreetingController {
             if (urls == null || urls.isEmpty()) {
                 model.addAttribute("mensagem", "URL não encontrado!");
             } else {
-                model.addAttribute("urls", urls);
+                ArrayList<String> listaDados = new ArrayList<>();
+
+                for (HashSet<String> hashSet : urls) {
+                    listaDados.addAll(hashSet);
+                }
+                model.addAttribute("urls", listaDados);
             }
 
         } catch (RemoteException e) {

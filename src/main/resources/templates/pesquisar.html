@@ -48,13 +48,23 @@
     </div>
 </nav>
 <body>
-<h1>Pesquisa</h1>
+<body>
+<div class="d-flex justify-content-center align-items-center">
+    <h1 class="text-center">Pesquisar</h1>
+</div>
+<div class="d-flex justify-content-center align-items-center">
+    <h3 class="text-center">Aqui poderá pesquisar o que mais desejar!</h3>
+</div>
+<div class="d-flex justify-content-center align-items-center">
+    <h5 class="text-center">Para adicionar stories Hacker News preencha a checkbox</h5>
+</div>
 <div th:if="${#httpServletRequest.getMethod() == 'GET'}">
     <form th:action="@{/pesquisar}" th:object="${pesquisa}" method="post">
         <div>
 
             <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
             <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
+            <input type="checkbox" aria-label="Checkbox for Hacker News stories">
 
         </div>
 
