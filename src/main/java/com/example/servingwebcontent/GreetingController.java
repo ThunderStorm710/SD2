@@ -124,7 +124,7 @@ public class GreetingController {
         System.out.println(pesquisa);
         System.out.println(cliente);
         HashSet<String[]> paginas;
-
+/*
         MyHackerNewsController hacker = new MyHackerNewsController();
 
         List<HackerNewsItemRecord> TopStories = hacker.hackerNewsTopStories(pesquisa.getTextoPesquisa());
@@ -133,7 +133,7 @@ public class GreetingController {
             ArrayList<String> array = new ArrayList<>();
             String url = story.url();
 
-        }
+        }*/
 
         try {
             paginas = h.pesquisarPaginas(cliente, pesquisa.getTextoPesquisa());
@@ -149,7 +149,9 @@ public class GreetingController {
             if (paginas == null) {
                 model.addAttribute("mensagem", "Pesquisa não encontrada!");
             } else {
-                model.addAttribute("paginas", paginas);
+
+                ArrayList<String[]> listaDados = new ArrayList<>(paginas);
+                model.addAttribute("paginas", listaDados);
             }
         } catch (RemoteException e) {
             e.printStackTrace();

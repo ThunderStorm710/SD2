@@ -64,7 +64,7 @@
 
             <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
             <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
-            <input type="checkbox" aria-label="Checkbox for Hacker News stories">
+            <input type="checkbox" aria-label="Checkbox for Hacker News stories" th:field="*{hackerNewsBool}">
 
         </div>
 
@@ -76,27 +76,35 @@
 
             <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
             <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
+            <input type="checkbox" aria-label="Checkbox for Hacker News stories" th:field="*{hackerNewsBool}">
             <div th:if="${mensagem}">
                 <p th:text="${mensagem}"></p>
             </div>
-            <table th:if="${paginas}">
-                <thead>
-                <tr>
-                    <th th:text="${textoPesquisa}">Resultados da pesquisa</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="resultado : ${paginas}">
-                    <td th:text="${resultado[0]}"></td>
-                    <td th:text="${resultado[1]}"></td>
-                    <td th:text="${resultado[2]}"></td>
-
-                </tr>
-                </tbody>
-            </table>
         </div>
 
     </form>
+    <div class="d-flex justify-content-center align-items-center" th:if="${paginas != null}">
+        <h5 class="text-center">Resultados da pesquisa</h5>
+    </div>
+    <table class="table" th:if="${paginas}">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Título</th>
+            <th scope="col">Citação</th>
+            <th scope="col">URL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="resultado, i : ${paginas}">
+            <td th:text="${i.count}"></td>
+            <td th:text="${resultado[0]}"></td>
+            <td th:text="${resultado[1]}"></td>
+            <td th:text="${resultado[2]}"></td>
+
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
