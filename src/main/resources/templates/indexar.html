@@ -6,34 +6,57 @@
     <title>Indexar</title>
 
 </head>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Googol</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link active" href="/indexar">Indexar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/pesquisar">Pesquisar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/consultar">Consultar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/info">Informações</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 <body>
-<h1>Indexar URL</h1>
+<div class="d-flex justify-content-center align-items-center">
+    <h1 class="text-center">Indexar URL</h1>
+</div>
+<div class="d-flex justify-content-center align-items-center">
+    <h3 class="text-center">Aqui poderá adicionar um URL que pretenda que o nosso motor de busca processe!</h3>
+</div>
 
 <div th:if="${#httpServletRequest.getMethod() == 'GET'}">
     <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
-        <div>
-
-            <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
-            <button class="btn btn-search" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
-
-        </div>
-
-    </form>
-</div>
-<div th:if="${#httpServletRequest.getMethod() == 'POST'}">
-    <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
-        <div>
-
-            <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
-
-            <button class="btn btn-search" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
-            <div th:if="${valor.equals('true')}">
-                <p>URL adicionado com sucesso!</p>
+        <div class="d-flex justify-content-center align-items-center" height="100vh">
+            <input type="text" class="text-center" th:field="*{textoPesquisa}" style="width: 200px;" required>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
             </div>
         </div>
     </form>
 </div>
-<a th:href="@{/}">Voltar</a>
+<div th:if="${#httpServletRequest.getMethod() == 'POST'}">
+    <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
+        <div class="d-flex justify-content-center align-items-center">
+            <input type="text" class="text-center" th:field="*{textoPesquisa}" style="width: 200px;" required>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
+            </div>
+        </div>
+        <div th:if="${valor.equals('true')}">
+            <p>URL adicionado com sucesso!</p>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>

@@ -230,8 +230,9 @@ public class GreetingController {
 
 
     @GetMapping("/login")
-    public String login(@RequestParam(name = "valor", defaultValue = "false") String valor, Model model) {
-        model.addAttribute("valor", valor);
+    public String login(@RequestParam(name = "valor1", defaultValue = "false") String valor1, @RequestParam(name = "valor2", defaultValue = "false") String valor2, Model model) {
+        model.addAttribute("valor1", valor1);
+        model.addAttribute("valor2", valor2);
         model.addAttribute("clienteInfo", new ClienteInfo());
         return "login";
     }
@@ -245,13 +246,21 @@ public class GreetingController {
             if (clienteInfo.getNome() == null) {
                 System.out.println("FIZ LOGIN");
                 cliente = h.verificarLogin(clienteInfo.getUsername(), clienteInfo.getPassword());
+                if (cliente == null) {
+                    model.addAttribute("valor1", "false");
+                    model.addAttribute("valor2", "true");
+
+                }
             } else {
                 System.out.println("FIZ REGISTO");
                 cliente = h.verificarRegisto(clienteInfo.getNome(), clienteInfo.getEmail(), clienteInfo.getUsername(), clienteInfo.getPassword(), 1000);
+                if (cliente == null) {
+                    model.addAttribute("valor1", "true");
+                    model.addAttribute("valor2", "false");
+                }
             }
             System.out.println(cliente);
             if (cliente == null) {
-                model.addAttribute("valor", "false");
                 return "login";
             }
 
