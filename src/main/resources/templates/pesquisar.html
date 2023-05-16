@@ -118,16 +118,17 @@
             <th scope="col">#</th>
             <th scope="col">ID</th>
             <th scope="col">Título</th>
+            <th scope="col">URL</th>
             <th scope="col">Autor</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="resultado, i : ${stories}">
             <td th:text="${i.count}"></td>
-            <td th:text="${resultado.id()}"></td>
-            <td th:text="${resultado.title()}"></td>
-            <td th:text="${resultado.url()}"></td>
-            <td th:text="${resultado.by()}"></td>
+            <td th:text="${resultado.id() != null ? resultado.id() : '---'}"></td>
+            <td th:text="${resultado.title() != null ? resultado.title() : '---'}"></td>
+            <td th:text="${resultado.url() != null ? resultado.url() : '---'}"></td>
+            <td th:text="${resultado.by() != null ? resultado.by() : '---'}"></td>
 
         </tr>
         </tbody>

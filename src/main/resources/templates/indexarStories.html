@@ -56,7 +56,7 @@
             </div>
         </div>
         <div>
-            <p th:text="Adicionados ${contadorIndexado} de ${numeroURLS} urls com sucesso!"></p>
+            <p>Adicionados <span th:text="${contadorIndexado}"></span> de <span th:text="${numeroURLS}"></span> urls com sucesso!</p>
         </div>
 
         <div class="d-flex justify-content-center align-items-center" th:if="${TopStories != null}">
@@ -75,10 +75,10 @@
             <tbody>
             <tr th:each="resultado, i : ${TopStories}">
                 <td th:text="${i.count}"></td>
-                <td th:text="${resultado.id()}"></td>
-                <td th:text="${resultado.by()}"></td>
-                <td th:text="${resultado.title()}"></td>
-                <td th:text="${resultado.url()}"></td>
+                <td th:text="${resultado.id() != null ? resultado.id() : '---'}"></td>
+                <td th:text="${resultado.title() != null ? resultado.title() : '---'}"></td>
+                <td th:text="${resultado.url() != null ? resultado.url() : '---'}"></td>
+                <td th:text="${resultado.by() != null ? resultado.by() : '---'}"></td>
 
             </tr>
             </tbody>

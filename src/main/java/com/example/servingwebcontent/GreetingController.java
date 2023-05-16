@@ -133,18 +133,20 @@ public class GreetingController {
         try {
             MyHackerNewsController hacker = new MyHackerNewsController();
             List<HackerNewsItemRecord> TopStories = hacker.UserTopStories(pesquisa.getTextoPesquisa());
+            List<HackerNewsItemRecord> stories = new ArrayList<>();
             System.out.println(TopStories);
             numeroURLS = TopStories.size();
             for (HackerNewsItemRecord story: TopStories) {
                 if (story.url() != null){
-                    if (h.indexarURL(cliente, pesquisa.getTextoPesquisa())){
+                    if (h.indexarURL(cliente, story.url())){
                         contadorIndexado++;
+                        stories.add(story);
                     }
                 }
             }
             model.addAttribute("contadorIndexado", contadorIndexado);
             model.addAttribute("numeroURLS", numeroURLS);
-            model.addAttribute("TopStories", TopStories);
+            model.addAttribute("TopStories", stories);
 
 
         } catch (RemoteException e) {
@@ -167,16 +169,9 @@ public class GreetingController {
         if (cliente == null) {
             return "redirect:/";
         }
-        System.out.println(pesquisa);
-        System.out.println(cliente);
         HashSet<String[]> paginas;
 
-        String meuCheckbox = request.getParameter("meuCheckbox");
-        if (meuCheckbox != null && meuCheckbox.equals("ativado")) {
-            MyHackerNewsController hacker = new MyHackerNewsController();
-            List<HackerNewsItemRecord> TopStories = hacker.hackerNewsTopStories(pesquisa.getTextoPesquisa());
-            model.addAttribute("stories", TopStories);
-        }
+
         try {
             paginas = h.pesquisarPaginas(cliente, pesquisa.getTextoPesquisa());
 
@@ -186,6 +181,15 @@ public class GreetingController {
 
                 ArrayList<String[]> listaDados = new ArrayList<>(paginas);
                 model.addAttribute("paginas", listaDados);
+            }
+            String meuCheckbox = request.getParameter("meuCheckbox");
+            if (meuCheckbox != null && meuCheckbox.equals("ativado")) {
+                MyHackerNewsController hacker = new MyHackerNewsController();
+                List<HackerNewsItemRecord> TopStories = hacker.hackerNewsTopStories(pesquisa.getTextoPesquisa());
+                model.addAttribute("stories", TopStories);
+                for (HackerNewsItemRecord story: TopStories) {
+                    h.indexarURL(cliente, story.url());
+                }
             }
         } catch (RemoteException e) {
             e.printStackTrace();
