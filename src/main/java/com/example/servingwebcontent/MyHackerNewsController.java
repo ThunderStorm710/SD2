@@ -334,6 +334,9 @@ public class MyHackerNewsController {
             //XPath xPath=factory.newXPath();
 
             JsonNode jsonNode = objectMapper.readTree(connection.getInputStream());
+            if (jsonNode == null){
+                return null;
+            }
 
             System.out.println(jsonNode);
 

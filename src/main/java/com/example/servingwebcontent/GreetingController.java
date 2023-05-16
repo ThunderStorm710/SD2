@@ -108,6 +108,46 @@ public class GreetingController {
         return "indexar";
     }
 
+    @GetMapping("/indexarStories")
+    public String indexarStories(@RequestParam(name = "contadorIndexado", defaultValue = "0") int contadorIndexado, @RequestParam(name = "numeroURLS", defaultValue = "0") int numeroURLS, Model model) {
+        if (cliente == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("contadorIndexado", contadorIndexado);
+        model.addAttribute("numeroURLS", numeroURLS);
+        model.addAttribute("pesquisa", new Pesquisa());
+        return "indexarStories";
+    }
+
+    @PostMapping("/indexarStories")
+    public String resultadoIndexarStories(@ModelAttribute Pesquisa pesquisa, Model model) {
+        int contadorIndexado = 0, numeroURLS;
+        if (cliente == null) {
+            return "redirect:/";
+        }
+        try {
+            MyHackerNewsController hacker = new MyHackerNewsController();
+            List<HackerNewsItemRecord> TopStories = hacker.UserTopStories(pesquisa.getTextoPesquisa());
+            System.out.println(TopStories);
+            numeroURLS = TopStories.size();
+            for (HackerNewsItemRecord story: TopStories) {
+                if (story.url() != null){
+                    if (h.indexarURL(cliente, pesquisa.getTextoPesquisa())){
+                        contadorIndexado++;
+                    }
+                }
+            }
+            model.addAttribute("contadorIndexado", contadorIndexado);
+            model.addAttribute("numeroURLS", numeroURLS);
+            model.addAttribute("TopStories", TopStories);
+
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return "indexarStories";
+    }
+
     @GetMapping("/pesquisar")
     public String pesquisar(Model model) {
         if (cliente == null) {
@@ -130,25 +170,10 @@ public class GreetingController {
         if (meuCheckbox != null && meuCheckbox.equals("ativado")) {
             MyHackerNewsController hacker = new MyHackerNewsController();
             List<HackerNewsItemRecord> TopStories = hacker.hackerNewsTopStories(pesquisa.getTextoPesquisa());
-            /*for(HackerNewsItemRecord story: TopStories){
-                System.out.println(story.id() + "--" + story.title());
-            }*/
             model.addAttribute("stories", TopStories);
         }
-
-
-
-
         try {
             paginas = h.pesquisarPaginas(cliente, pesquisa.getTextoPesquisa());
-            if (paginas != null) {
-                for (String[] p : paginas) {
-
-                    System.out.println(p[0] + "-" + p[1] + " tam " + p.length);
-                }
-            }
-            System.out.println(paginas);
-
 
             if (paginas == null) {
                 model.addAttribute("mensagem", "Pesquisa não encontrada!");

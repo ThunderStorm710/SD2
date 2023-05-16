@@ -10,11 +10,11 @@
     <a class="navbar-brand" href="/">Googol</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link active" href="/indexar">Indexar</a>
-            </li>
             <li class="nav-item">
-                <a class="nav-link" href="/indexarStories">Indexar Stories</a>
+                <a class="nav-link" href="/indexar">Indexar</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link active" href="/indexarStories">Indexar Stories</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/pesquisar">Pesquisar</a>
@@ -31,14 +31,14 @@
 
 <body>
 <div class="d-flex justify-content-center align-items-center">
-    <h1 class="text-center">Indexar URL</h1>
+    <h1 class="text-center">Indexar Hacker News Stories</h1>
 </div>
 <div class="d-flex justify-content-center align-items-center">
-    <h3 class="text-center">Aqui poderá adicionar um URL que pretenda que o nosso motor de busca processe!</h3>
+    <h3 class="text-center">Aqui poderá indexar todas as stories que quiser para o nosso motor de busca processar!</h3>
 </div>
 
 <div th:if="${#httpServletRequest.getMethod() == 'GET'}">
-    <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
+    <form th:action="@{/indexarStories}" th:object="${pesquisa}" method="post">
         <div class="d-flex justify-content-center align-items-center" height="100vh">
             <input type="text" class="text-center" th:field="*{textoPesquisa}" style="width: 200px;" required>
             <div class="input-group-append">
@@ -48,16 +48,41 @@
     </form>
 </div>
 <div th:if="${#httpServletRequest.getMethod() == 'POST'}">
-    <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
+    <form th:action="@{/indexarStories}" th:object="${pesquisa}" method="post">
         <div class="d-flex justify-content-center align-items-center">
             <input type="text" class="text-center" th:field="*{textoPesquisa}" style="width: 200px;" required>
             <div class="input-group-append">
                 <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
             </div>
         </div>
-        <div th:if="${valor.equals('true')}">
-            <p>URL adicionado com sucesso!</p>
+        <div>
+            <p th:text="Adicionados ${contadorIndexado} de ${numeroURLS} urls com sucesso!"></p>
         </div>
+
+        <div class="d-flex justify-content-center align-items-center" th:if="${TopStories != null}">
+            <h5 class="text-center">Resultados da pesquisa</h5>
+        </div>
+        <table class="table" th:if="${TopStories}">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Autor</th>
+                <th scope="col">Título</th>
+                <th scope="col">URL</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="resultado, i : ${TopStories}">
+                <td th:text="${i.count}"></td>
+                <td th:text="${resultado.id()}"></td>
+                <td th:text="${resultado.by()}"></td>
+                <td th:text="${resultado.title()}"></td>
+                <td th:text="${resultado.url()}"></td>
+
+            </tr>
+            </tbody>
+        </table>
     </form>
 </div>
 

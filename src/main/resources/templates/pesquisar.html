@@ -35,6 +35,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/indexar">Indexar</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/indexarStories">Indexar Stories</a>
+            </li>
             <li class="nav-item active">
                 <a class="nav-link active" href="/pesquisar">Pesquisar</a>
             </li>
@@ -123,6 +126,7 @@
             <td th:text="${i.count}"></td>
             <td th:text="${resultado.id()}"></td>
             <td th:text="${resultado.title()}"></td>
+            <td th:text="${resultado.url()}"></td>
             <td th:text="${resultado.by()}"></td>
 
         </tr>
