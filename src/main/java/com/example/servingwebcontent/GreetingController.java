@@ -18,9 +18,11 @@ import com.example.servingwebcontent.src.src.SearchModule_I;
 import com.example.servingwebcontent.src.src.Storage;
 import com.example.servingwebcontent.thedata.Employee;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +36,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Controller
 public class GreetingController {
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     private ClienteInfo cliente;
     private SearchModule_I h;
@@ -248,6 +253,8 @@ public class GreetingController {
             model.addAttribute("downloaders", downloaders);
             model.addAttribute("barrels", barrels);
             model.addAttribute("mapa", mapa);
+
+            messagingTemplate.convertAndSend("/info", model);
 
         } catch (RemoteException e){
             e.printStackTrace();
