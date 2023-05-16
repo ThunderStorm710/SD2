@@ -64,7 +64,7 @@
 
             <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
             <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
-            <input type="checkbox" aria-label="Checkbox for Hacker News stories" th:field="*{hackerNewsBool}">
+            <input type="checkbox" name="meuCheckbox" value="ativado">
 
         </div>
 
@@ -76,7 +76,7 @@
 
             <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
             <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
-            <input type="checkbox" aria-label="Checkbox for Hacker News stories" th:field="*{hackerNewsBool}">
+            <input type="checkbox" name="meuCheckbox" value="ativado">
             <div th:if="${mensagem}">
                 <p th:text="${mensagem}"></p>
             </div>
@@ -101,6 +101,29 @@
             <td th:text="${resultado[0]}"></td>
             <td th:text="${resultado[1]}"></td>
             <td th:text="${resultado[2]}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center align-items-center" th:if="${stories != null}">
+        <h5 class="text-center">Resultados da pesquisa Hacker News</h5>
+    </div>
+    <table class="table" th:if="${stories}">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">Título</th>
+            <th scope="col">Autor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="resultado, i : ${stories}">
+            <td th:text="${i.count}"></td>
+            <td th:text="${resultado.id()}"></td>
+            <td th:text="${resultado.title()}"></td>
+            <td th:text="${resultado.by()}"></td>
 
         </tr>
         </tbody>

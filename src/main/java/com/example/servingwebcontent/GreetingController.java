@@ -6,6 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.util.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.example.servingwebcontent.beans.Number;
@@ -117,23 +118,26 @@ public class GreetingController {
     }
 
     @PostMapping("/pesquisar")
-    public String pesquisar(@ModelAttribute Pesquisa pesquisa, Model model) {
+    public String pesquisar(@ModelAttribute Pesquisa pesquisa, Model model, HttpServletRequest request) {
         if (cliente == null) {
             return "redirect:/";
         }
         System.out.println(pesquisa);
         System.out.println(cliente);
         HashSet<String[]> paginas;
-/*
-        MyHackerNewsController hacker = new MyHackerNewsController();
 
-        List<HackerNewsItemRecord> TopStories = hacker.hackerNewsTopStories(pesquisa.getTextoPesquisa());
+        String meuCheckbox = request.getParameter("meuCheckbox");
+        if (meuCheckbox != null && meuCheckbox.equals("ativado")) {
+            MyHackerNewsController hacker = new MyHackerNewsController();
+            List<HackerNewsItemRecord> TopStories = hacker.hackerNewsTopStories(pesquisa.getTextoPesquisa());
+            /*for(HackerNewsItemRecord story: TopStories){
+                System.out.println(story.id() + "--" + story.title());
+            }*/
+            model.addAttribute("stories", TopStories);
+        }
 
-        for(HackerNewsItemRecord story: TopStories){
-            ArrayList<String> array = new ArrayList<>();
-            String url = story.url();
 
-        }*/
+
 
         try {
             paginas = h.pesquisarPaginas(cliente, pesquisa.getTextoPesquisa());

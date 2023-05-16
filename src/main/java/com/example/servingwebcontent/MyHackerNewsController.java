@@ -78,7 +78,7 @@ public class MyHackerNewsController {
             for (JsonNode node : jsonNode) {
                 String id = node.asText();
                 //System.out.println(id);
-                if (FindStory(id, pesq) != null){
+                if (FindStory(id, pesq) != null) {
                     HackerNewsItemRecord story = FindStory(id, pesq);
                     TopStories.add(story);
                 }
@@ -90,7 +90,7 @@ public class MyHackerNewsController {
             }
             return TopStories;
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -101,7 +101,7 @@ public class MyHackerNewsController {
 
         try {
             // Initiate the REST client.
-            URL url = new URL("https://hacker-news.firebaseio.com/v0/item/"+ id + ".json?print=pretty");
+            URL url = new URL("https://hacker-news.firebaseio.com/v0/item/" + id + ".json?print=pretty");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             // HTTP Verb
@@ -152,8 +152,8 @@ public class MyHackerNewsController {
 
 
             //for (JsonNode node : jsonNode) {
-                //System.out.println(node.get("title").asText());
-                //System.out.println(node);
+            //System.out.println(node.get("title").asText());
+            //System.out.println(node);
             /*
             if (jsonNode.get("title") != null){
                 String title = jsonNode.get("title").asText();
@@ -216,7 +216,7 @@ public class MyHackerNewsController {
                 }
             }*/
 
-            if(jsonNode.get("text") != null){
+            if (jsonNode.get("text") != null) {
                 String text = jsonNode.get("text").asText();
 
                 String[] palavras = text.split(" ");
@@ -287,7 +287,7 @@ public class MyHackerNewsController {
             }
 
             return null;
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -344,7 +344,7 @@ public class MyHackerNewsController {
             // Pretty printing of output
             System.out.println("===========================================");
 
-            if (jsonNode.get("id").asText().equals(user_id)){
+            if (jsonNode.get("id").asText().equals(user_id)) {
                 //List<Integer> userStories = jsonNode.get("submitted") != null ? Arrays.asList(jsonNode.get("submitted").asInt()) : null;
                 List<Integer> userStories = null;
                 JsonNode submittedNode = jsonNode.get("submitted");
@@ -357,14 +357,14 @@ public class MyHackerNewsController {
                     }
                 }
                 System.out.println(userStories);
-                if (userStories != null){
-                    for (Integer id : userStories){
-                        if (FindUserStory(id.toString()) != null){
+                if (userStories != null) {
+                    for (Integer id : userStories) {
+                        if (FindUserStory(id.toString()) != null) {
                             HackerNewsItemRecord story = FindUserStory(id.toString());
                             userTopStories.add(story);
                         }
                     }
-                }else{
+                } else {
                     System.out.println("User nao tem nenhuma story associada");
                 }
             }
@@ -375,7 +375,7 @@ public class MyHackerNewsController {
             }
             return userTopStories;
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -386,7 +386,7 @@ public class MyHackerNewsController {
 
         try {
             // Initiate the REST client.
-            URL url = new URL("https://hacker-news.firebaseio.com/v0/item/"+ id + ".json?print=pretty");
+            URL url = new URL("https://hacker-news.firebaseio.com/v0/item/" + id + ".json?print=pretty");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             // HTTP Verb
@@ -429,13 +429,12 @@ public class MyHackerNewsController {
             JsonNode jsonNode = objectMapper.readTree(connection.getInputStream());
 
 
-
             // We don't need the connection anymore once we get the nodes.
             connection.disconnect();
 
             // Pretty printing of output
 
-            if(jsonNode.get("type").asText().equals("story")){
+            if (jsonNode.get("type").asText().equals("story")) {
                 //System.out.println(jsonNode);
                 Integer id_aux = jsonNode.has("id") && !jsonNode.get("id").isNull() ? jsonNode.get("id").asInt() : null;
                 Boolean deleted = jsonNode.has("deleted") && !jsonNode.get("deleted").isNull() ? jsonNode.get("deleted").asBoolean() : null;
@@ -478,7 +477,7 @@ public class MyHackerNewsController {
             }
 
             return null;
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
