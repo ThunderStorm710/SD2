@@ -46,25 +46,29 @@
 
 <div th:if="${#httpServletRequest.getMethod() == 'GET'}">
     <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
-        <div class="d-flex justify-content-center align-items-center" height="100vh">
-            <input type="text" class="text-center" th:field="*{textoPesquisa}" style="width: 200px;" required>
-            <div class="input-group-append">
+        <div class="d-flex justify-content-center align-items-center">
+            <input type="text" class="text-center mr-2" th:field="*{textoPesquisa}" style="width: 200px;" required>
+            <div class="input-group-append d-flex justify-content-center align-items-center">
                 <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
             </div>
         </div>
+
     </form>
 </div>
 <div th:if="${#httpServletRequest.getMethod() == 'POST'}">
     <form th:action="@{/indexar}" th:object="${pesquisa}" method="post">
         <div class="d-flex justify-content-center align-items-center">
-            <input type="text" class="text-center" th:field="*{textoPesquisa}" style="width: 200px;" required>
-            <div class="input-group-append">
+            <input type="text" class="text-center mr-2" th:field="*{textoPesquisa}" style="width: 200px;" required>
+            <div class="input-group-append d-flex justify-content-center align-items-center">
                 <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
+
             </div>
         </div>
-        <div th:if="${valor.equals('true')}">
-            <p>URL adicionado com sucesso!</p>
+        <div class="d-flex justify-content-center align-items-center">
+            <p th:if="${valor.equals('true')}">URL adicionado com sucesso!</p>
+            <p th:if="${valor.equals('false')}">URL não foi adicionado...</p>
         </div>
+
     </form>
 </div>
 

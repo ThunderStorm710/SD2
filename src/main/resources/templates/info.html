@@ -42,7 +42,6 @@
             }
 
             let downloaders = dados.downloaders;
-
             for (i = 0; i < downloaders.length; i++) {
                 row = `<tr>
                             <th scope="row">${i + 1}</th>
@@ -59,7 +58,6 @@
             const array = Object.entries(mapa);
             array.sort((a, b) => b[1] - a[1]);
             const objetoOrdenado = Object.fromEntries(array);
-            console.log(objetoOrdenado);
 
 
             let keys = Object.keys(objetoOrdenado);
@@ -122,7 +120,7 @@
         <div class="d-flex justify-content-center align-items-center">
             <table class="table">
                 <thead class="thead-dark">
-                <tr class="bg-info">
+                <tr>
                     <th>#</th>
                     <th>IP</th>
                     <th>Porto</th>
@@ -138,7 +136,7 @@
         <div class="d-flex justify-content-center align-items-center">
             <table class="table">
                 <thead class="thead-dark">
-                <tr class="bg-info">
+                <tr>
                     <th>#</th>
                     <th>IP</th>
                     <th>Porto</th>
@@ -154,7 +152,7 @@
         <div class="d-flex justify-content-center align-items-center">
             <table class="table">
                 <thead class="thead-dark">
-                <tr class="bg-info">
+                <tr>
                     <th>#</th>
                     <th>Pesquisa</th>
                     <th>Frequência</th>

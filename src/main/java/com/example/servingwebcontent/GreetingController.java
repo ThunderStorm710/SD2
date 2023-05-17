@@ -194,7 +194,7 @@ public class GreetingController {
         return "consultar";
     }
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 2000)
     public void atualizar() {
         try {
             if (cliente == null){
@@ -203,9 +203,6 @@ public class GreetingController {
             ArrayList<DownloaderInfo> downloaders = h.obterInfoDownloaders();
             ArrayList<Storage> barrels = h.obterInfoBarrels();
             HashMap<String, Integer> mapa = h.pesquisasFrequentes();
-            System.out.println(downloaders);
-            System.out.println(barrels);
-            System.out.println(mapa);
             InfoGeral info = new InfoGeral(barrels, downloaders, mapa);
             messagingTemplate.convertAndSend("/topic/dados", info);
         } catch (RemoteException e) {
