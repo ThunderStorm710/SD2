@@ -25,6 +25,13 @@
                 <a class="nav-link" href="/info">Informações</a>
             </li>
         </ul>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 <body>
@@ -39,9 +46,9 @@
 </div>
 <div th:if="${#httpServletRequest.getMethod() == 'GET'}">
     <form th:action="@{/consultar}" th:object="${pesquisa}" method="post">
-        <div>
+        <div class="d-flex justify-content-center align-items-center">
 
-            <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
+            <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}" style="width: 200px;" required>
             <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
 
         </div>
@@ -50,14 +57,15 @@
 </div>
 <div th:if="${#httpServletRequest.getMethod() == 'POST'}">
     <form th:action="@{/consultar}" th:object="${pesquisa}" method="post">
-        <div>
+        <div class="d-flex justify-content-center align-items-center">
 
-            <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}">
+            <input type="text" class="form-control" placeholder="" th:field="*{textoPesquisa}" style="width: 200px;" required>
             <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>Search</button>
-            <div th:if="${mensagem}">
-                <p th:text="${mensagem}"></p>
-            </div>
 
+
+        </div>
+        <div th:if="${mensagem}" class="d-flex justify-content-center align-items-center">
+            <p th:text="${mensagem}"></p>
         </div>
 
         <div>
