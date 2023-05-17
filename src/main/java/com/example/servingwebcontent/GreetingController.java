@@ -10,15 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.example.servingwebcontent.forms.Pesquisa;
-import com.example.servingwebcontent.src.src.ClienteInfo;
-import com.example.servingwebcontent.src.src.DownloaderInfo;
-import com.example.servingwebcontent.src.src.SearchModule_I;
-import com.example.servingwebcontent.src.src.Storage;
+import com.example.servingwebcontent.src.src.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -106,9 +104,9 @@ public class GreetingController {
             List<HackerNewsItemRecord> stories = new ArrayList<>();
             System.out.println(TopStories);
             numeroURLS = TopStories.size();
-            for (HackerNewsItemRecord story: TopStories) {
-                if (story.url() != null){
-                    if (h.indexarURL(cliente, story.url())){
+            for (HackerNewsItemRecord story : TopStories) {
+                if (story.url() != null) {
+                    if (h.indexarURL(cliente, story.url())) {
                         contadorIndexado++;
                         stories.add(story);
                     }
@@ -157,7 +155,7 @@ public class GreetingController {
                 MyHackerNewsController hacker = new MyHackerNewsController();
                 List<HackerNewsItemRecord> TopStories = hacker.hackerNewsTopStories(pesquisa.getTextoPesquisa());
                 model.addAttribute("stories", TopStories);
-                for (HackerNewsItemRecord story: TopStories) {
+                for (HackerNewsItemRecord story : TopStories) {
                     h.indexarURL(cliente, story.url());
                 }
             }
@@ -209,36 +207,36 @@ public class GreetingController {
         return "consultar";
     }
 
-    public void atualizarDados() {
+    @Scheduled(fixedDelay = 3000)
+    public void atualizar() {
         try {
+            if (cliente == null){
+                return;
+            }
             ArrayList<DownloaderInfo> downloaders = h.obterInfoDownloaders();
             ArrayList<Storage> barrels = h.obterInfoBarrels();
             HashMap<String, Integer> mapa = h.pesquisasFrequentes();
             System.out.println(downloaders);
             System.out.println(barrels);
             System.out.println(mapa);
-            //List<String> listaDados = new ArrayList<>(barrels);
-            messagingTemplate.convertAndSend("/topic/dados", barrels);
-        } catch (RemoteException e){
+            InfoGeral info = new InfoGeral(barrels, downloaders, mapa);
+            messagingTemplate.convertAndSend("/topic/dados", info);
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
-    @MessageMapping("/message")
-    @SendTo("/topic/messages")
-    public Pesquisa onMessage(Pesquisa message) throws InterruptedException {
-        System.out.println("Message received " + message);
-        Thread.sleep(1000); // simulated delay
-        return new Pesquisa(HtmlUtils.htmlEscape(message.getTextoPesquisa()));
-    }
 
-    @GetMapping("/info1")
-    public String info1(Model model){
+    @GetMapping("/info")
+    public String info1() {
+        if (cliente == null){
+            return "redirect:/";
+        }
         return "info1";
     }
 
 /*
     @GetMapping("/info")
-    public String info(Model model)  {
+    public String info(Model model) {
         if (cliente == null) {
             return "redirect:/";
         }
@@ -256,15 +254,15 @@ public class GreetingController {
             model.addAttribute("barrels", barrels);
             model.addAttribute("mapa", mapa);
 
+
             messagingTemplate.convertAndSend("/info", model);
 
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
         return "info";
     }
-
- */
+*/
 
     @GetMapping("/home")
     public String pesquisa(Model model) {
