@@ -9,19 +9,15 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.example.servingwebcontent.beans.Number;
 import com.example.servingwebcontent.forms.Pesquisa;
-import com.example.servingwebcontent.forms.Project;
 import com.example.servingwebcontent.src.src.ClienteInfo;
 import com.example.servingwebcontent.src.src.DownloaderInfo;
 import com.example.servingwebcontent.src.src.SearchModule_I;
 import com.example.servingwebcontent.src.src.Storage;
-import com.example.servingwebcontent.thedata.Employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.util.HtmlUtils;
 
 
 @Controller
@@ -42,33 +39,6 @@ public class GreetingController {
 
     private ClienteInfo cliente;
     private SearchModule_I h;
-
-    @Resource(name = "requestScopedNumberGenerator")
-    private Number nRequest;
-
-    @Resource(name = "sessionScopedNumberGenerator")
-    private Number nSession;
-
-    @Resource(name = "applicationScopedNumberGenerator")
-    private Number nApplication;
-
-    @Bean
-    @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public Number requestScopedNumberGenerator() {
-        return new Number();
-    }
-
-    @Bean
-    @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public Number sessionScopedNumberGenerator() {
-        return new Number();
-    }
-
-    @Bean
-    @Scope(value = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public Number applicationScopedNumberGenerator() {
-        return new Number();
-    }
 
     /*@GetMapping("/")
     public String redirect() {
@@ -239,6 +209,34 @@ public class GreetingController {
         return "consultar";
     }
 
+    public void atualizarDados() {
+        try {
+            ArrayList<DownloaderInfo> downloaders = h.obterInfoDownloaders();
+            ArrayList<Storage> barrels = h.obterInfoBarrels();
+            HashMap<String, Integer> mapa = h.pesquisasFrequentes();
+            System.out.println(downloaders);
+            System.out.println(barrels);
+            System.out.println(mapa);
+            //List<String> listaDados = new ArrayList<>(barrels);
+            messagingTemplate.convertAndSend("/topic/dados", barrels);
+        } catch (RemoteException e){
+            e.printStackTrace();
+        }
+    }
+    @MessageMapping("/message")
+    @SendTo("/topic/messages")
+    public Pesquisa onMessage(Pesquisa message) throws InterruptedException {
+        System.out.println("Message received " + message);
+        Thread.sleep(1000); // simulated delay
+        return new Pesquisa(HtmlUtils.htmlEscape(message.getTextoPesquisa()));
+    }
+
+    @GetMapping("/info1")
+    public String info1(Model model){
+        return "info1";
+    }
+
+/*
     @GetMapping("/info")
     public String info(Model model)  {
         if (cliente == null) {
@@ -265,6 +263,8 @@ public class GreetingController {
         }
         return "info";
     }
+
+ */
 
     @GetMapping("/home")
     public String pesquisa(Model model) {

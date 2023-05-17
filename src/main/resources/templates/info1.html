@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Minha Página</title>
+    <script src="/webjars/sockjs-client/1.5.0/dist/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/dist/stomp.min.js"></script>
+    <script type="text/javascript">
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS("/my-websocket");
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log("Connected: " + frame);
+                stompClient.subscribe("/topic/dados", function (message) {
+                    atualizarDados(JSON.parse(message.body));
+                });
+            });
+        }
+
+        function atualizarDados(dados) {
+            var table = document.getElementById("dados");
+            table.innerHTML = "";
+            for (var i = 0; i < dados.length; i++) {
+                var row = table.insertRow(i);
+                var cell = row.insertCell(0);
+                cell.innerHTML = dados[i];
+            }
+        }
+    </script>
+</head>
+<body onload="connect()">
+<h1>Dados</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Dado</th>
+    </tr>
+    </thead>
+    <tbody id="dados">
+    <tr th:each="dado : ${dados}">
+        <td th:text="${dado}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
