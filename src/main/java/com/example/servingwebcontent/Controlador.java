@@ -31,10 +31,11 @@ public class Controlador {
     private SearchModule_I h;
 
     @GetMapping("/")
-    public String page() {
+    public String page(Model model) {
         if (cliente == null) {
             return "redirect:/login";
         } else {
+            model.addAttribute("cliente", cliente);
             return "page";
         }
     }
