@@ -1,10 +1,82 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Minha Página</title>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/webjars/jquery/jquery.min.js"></script>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <meta charset="UTF-8">
-    <title>Consulta</title>
+    <script type="text/javascript">
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS("/my-websocket");
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log("Connected: " + frame);
+                stompClient.subscribe("/topic/dados", function (message) {
+                    console.log(message.body);
+                    atualizarDados(JSON.parse(message.body));
+                });
+            });
+        }
+
+        function atualizarDados(dados) {
+            var table1 = document.getElementById("tabela1");
+            var table2 = document.getElementById("tabela2");
+            var table3 = document.getElementById("tabela3");
+
+            table1.innerHTML = ""
+            table2.innerHTML = ""
+            table3.innerHTML = ""
+            var row, i;
+            let barrels = dados.barrels;
+            for (i = 0; i < barrels.length; i++) {
+                row = `<tr>
+                            <th scope="row">${i + 1}</th>
+							<td>${barrels[i].ip}</td>
+							<td>${barrels[i].porto}</td>
+							<td>${barrels[i].gama}</td>
+					  </tr>`
+                table1.innerHTML += row
+            }
+
+            let downloaders = dados.downloaders;
+
+            for (i = 0; i < downloaders.length; i++) {
+                row = `<tr>
+                            <th scope="row">${i + 1}</th>
+							<td>${downloaders[i].ip}</td>
+							<td>${downloaders[i].porto}</td>
+							<td>${downloaders[i].id}</td>
+					  </tr>`
+                table2.innerHTML += row
+            }
+
+
+            let mapa = dados.mapaPesquisas;
+            console.log(typeof(mapa))
+            const array = Object.entries(mapa);
+            array.sort((a, b) => b[1] - a[1]);
+            const objetoOrdenado = Object.fromEntries(array);
+            console.log(objetoOrdenado);
+
+
+            let keys = Object.keys(objetoOrdenado);
+            for (i = 0; i < keys.length; i++) {
+                row = `<tr>
+                            <th scope="row">${i + 1}</th>
+							<td>${keys[i]}</td>
+							<td>${mapa[keys[i]]}</td>
+					  </tr>`
+                table3.innerHTML += row
+            }
+        }
+
+    </script>
 </head>
+
+<body onload="connect()">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">Googol</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -22,94 +94,78 @@
                 <a class="nav-link" href="/consultar">Consultar</a>
             </li>
             <li class="nav-item active">
-                <a id = "connect" class="nav-link active" href="/info">Informações</a>
+                <a id="connect" class="nav-link active" href="/info">Informações</a>
             </li>
         </ul>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
-<body>
+
 <div class="d-flex justify-content-center align-items-center">
     <h1 class="text-center">Informação geral</h1>
 </div>
 <div class="d-flex justify-content-center align-items-center">
     <h3 class="text-center">Aqui poderá obter toda a informação sobre a nossa plataforma!</h3>
 </div>
+
 <div>
     <div>
         <div class="d-flex justify-content-center align-items-center">
-            <h5 class="text-center">Downloaders</h5>
-        </div>
-        <div class="d-flex justify-content-center align-items-center" th:if="${!d}">
-            <table class="table" th:if="${downloaders}">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">IP</th>
-                    <th scope="col">Porto</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="downloader : ${downloaders}">
-                    <td th:text="${downloader.id}"></td>
-                    <td th:text="${downloader.ip}"></td>
-                    <td th:text="${downloader.porto}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="d-flex justify-content-center align-items-center" th:if="${d}">
-            <h5>Não existem quaisquer downloaders online de momento...</h5>
-        </div>
-
-        <div class="d-flex justify-content-center align-items-center" th:if="${!b}">
             <h5 class="text-center">Storage Barrels</h5>
         </div>
-        <div class="d-flex justify-content-center align-items-center" th:if="${!b}">
-            <table class="table" th:if="${barrels}">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">IP</th>
-                    <th scope="col">Porto</th>
-                    <th scope="col">Gama</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="barrel: ${barrels}">
-                    <td th:text="${barrel.ip}"></td>
-                    <td th:text="${barrel.porto}"></td>
-                    <td th:text="${barrel.gama}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div th:if="${b}">
-            <h5 class="text-center">Não existem quaisquer storage barrels online de momento...</h5>
-        </div>
-
         <div class="d-flex justify-content-center align-items-center">
-            <h5>Pesquisas frequentes</h5>
-        </div>
-
-        <div class="d-flex justify-content-center align-items-center" th:if="${!m}">
-            <table class="table" th:if="${mapa}">
+            <table class="table">
                 <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Pesquisa</th>
-                    <th scope="col">Frequência</th>
+                <tr class="bg-info">
+                    <th>#</th>
+                    <th>IP</th>
+                    <th>Porto</th>
+                    <th>Gama</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr th:each="par : ${mapa}">
-                    <td th:text="${par.getKey()}"></td>
-                    <td th:text="${par.getValue()}"></td>
-                </tr>
-                </tbody>
+                <tbody id="tabela1"></tbody>
             </table>
         </div>
-        <div th:if="${m}">
-            <h5>Não existem quaisquer pesquisas de momento...</h5>
+        <div class="d-flex justify-content-center align-items-center">
+            <h5 class="text-center">Downloaders</h5>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr class="bg-info">
+                    <th>#</th>
+                    <th>IP</th>
+                    <th>Porto</th>
+                    <th>ID</th>
+                </tr>
+                </thead>
+                <tbody id="tabela2"></tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <h5 class="text-center">Pesquisas frequentes</h5>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr class="bg-info">
+                    <th>#</th>
+                    <th>Pesquisa</th>
+                    <th>Frequência</th>
+                </tr>
+                </thead>
+                <tbody id="tabela3"></tbody>
+            </table>
         </div>
     </div>
 </div>
+
+
 </body>
 </html>

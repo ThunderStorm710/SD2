@@ -5,16 +5,12 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.example.servingwebcontent.forms.Pesquisa;
 import com.example.servingwebcontent.src.src.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -23,10 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.util.HtmlUtils;
 
 
 @Controller
@@ -37,11 +29,6 @@ public class GreetingController {
 
     private ClienteInfo cliente;
     private SearchModule_I h;
-
-    /*@GetMapping("/")
-    public String redirect() {
-        return "redirect:/home";
-    }*/
 
     @GetMapping("/")
     public String page() {
@@ -227,52 +214,19 @@ public class GreetingController {
     }
 
     @GetMapping("/info")
-    public String info1() {
+    public String info() {
         if (cliente == null){
             return "redirect:/";
         }
-        return "info1";
-    }
-
-/*
-    @GetMapping("/info")
-    public String info(Model model) {
-        if (cliente == null) {
-            return "redirect:/";
-        }
-        try {
-            ArrayList<DownloaderInfo> downloaders = h.obterInfoDownloaders();
-            ArrayList<Storage> barrels = h.obterInfoBarrels();
-            HashMap<String, Integer> mapa = h.pesquisasFrequentes();
-            System.out.println(downloaders);
-            System.out.println(barrels);
-            System.out.println(mapa);
-            model.addAttribute("d", downloaders == null || downloaders.isEmpty());
-            model.addAttribute("b", barrels == null || barrels.isEmpty());
-            model.addAttribute("m", mapa == null || mapa.isEmpty());
-            model.addAttribute("downloaders", downloaders);
-            model.addAttribute("barrels", barrels);
-            model.addAttribute("mapa", mapa);
-
-
-            messagingTemplate.convertAndSend("/info", model);
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
         return "info";
     }
-*/
 
-    @GetMapping("/home")
-    public String pesquisa(Model model) {
-        if (cliente == null) {
-            return "redirect:/";
-        }
-        model.addAttribute("pesquisa", new Pesquisa());
-        return "home";
+    @GetMapping("/logout")
+    public String logout() {
+        cliente = null;
+        h = null;
+        return "redirect:/login";
     }
-
 
     @GetMapping("/login")
     public String login(@RequestParam(name = "valor1", defaultValue = "false") String valor1, @RequestParam(name = "valor2", defaultValue = "false") String valor2, Model model) {
@@ -289,7 +243,6 @@ public class GreetingController {
             System.out.println(clienteInfo);
             h = (SearchModule_I) LocateRegistry.getRegistry(1100).lookup("Search_Module");
             if (clienteInfo.getNome() == null) {
-                System.out.println("FIZ LOGIN");
                 cliente = h.verificarLogin(clienteInfo.getUsername(), clienteInfo.getPassword());
                 if (cliente == null) {
                     model.addAttribute("valor1", "false");
@@ -297,7 +250,6 @@ public class GreetingController {
 
                 }
             } else {
-                System.out.println("FIZ REGISTO");
                 cliente = h.verificarRegisto(clienteInfo.getNome(), clienteInfo.getEmail(), clienteInfo.getUsername(), clienteInfo.getPassword(), 1000);
                 if (cliente == null) {
                     model.addAttribute("valor1", "true");
